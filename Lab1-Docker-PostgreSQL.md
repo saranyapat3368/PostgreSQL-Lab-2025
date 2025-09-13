@@ -80,7 +80,7 @@ docker run hello-world
 
 **บันทึกผลการทดลอง - การเตรียมความพร้อม:**
 ```
-https://raw.githubusercontent.com/<user>/<repo>/main/images/1.png
+![ผลการทดลอง](https://raw.githubusercontent.com/somchai123/postgres-test/main/images/1.png)
 
 ```
 
