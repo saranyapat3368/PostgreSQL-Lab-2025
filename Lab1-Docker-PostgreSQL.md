@@ -80,7 +80,8 @@ docker run hello-world
 
 **บันทึกผลการทดลอง - การเตรียมความพร้อม:**
 ```
-![รูป 1](https://raw.githubusercontent.com/<user>/<repo>/main/images/1.png)
+https://raw.githubusercontent.com/<user>/<repo>/main/images/1.png
+
 ```
 
 ## ขั้นตอนการทดลอง
