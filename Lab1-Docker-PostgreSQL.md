@@ -104,12 +104,14 @@ docker inspect postgres
 
 
 **บันทึกผลการทดลอง - Step 1:**
-```
-<img width="1918" height="932" alt="1 1" src="https://github.com/user-attachments/assets/8310c3b4-35ac-4e61-a086-799cc27de0eb" />
-<img width="1765" height="968" alt="1 2" src="https://github.com/user-attachments/assets/2562e199-d58b-4cce-84b9-a031286a6bfd" />
-<img width="1851" height="883" alt="1 3" src="https://github.com/user-attachments/assets/a79e753b-061b-4c3f-bfff-75a6bef75541" />
 
-```
+![](https://github.com/user-attachments/assets/8310c3b4-35ac-4e61-a086-799cc27de0eb)
+
+![](https://github.com/user-attachments/assets/2562e199-d58b-4cce-84b9-a031286a6bfd)
+
+![](https://github.com/user-attachments/assets/a79e753b-061b-4c3f-bfff-75a6bef75541)
+
+
 
 ### Step 2: Create Docker Volume for Data Persistence
 
@@ -130,10 +132,10 @@ docker volume create postgres-config
 **คำอธิบาย**: Docker Volume จะทำให้ข้อมูลคงอยู่แม้ Container จะถูกลบ
 
 **บันทึกผลการทดลอง - Step 2:**
-```
-<img width="916" height="645" alt="2 1" src="https://github.com/user-attachments/assets/8855ae5b-2f3c-4ea6-a9b5-03e66744328c" />
 
-```
+![](https://github.com/user-attachments/assets/8855ae5b-2f3c-4ea6-a9b5-03e66744328c)
+
+
 
 ### Step 3: Create PostgreSQL Container with Volume
 
@@ -165,9 +167,9 @@ docker run --name postgres-lab \
 - `-c shared_buffers=256MB`: กำหนด shared buffers
 
 **บันทึกผลการทดลอง - Step 3:**
-```
-<img width="915" height="320" alt="3 1" src="https://github.com/user-attachments/assets/bb1d23e9-8262-4b19-be2c-9c4a76b1201f" />
-```
+
+![](https://github.com/user-attachments/assets/bb1d23e9-8262-4b19-be2c-9c4a76b1201f)
+
 
 ### Step 4: Verify Container Status and Resource Usage
 
@@ -186,10 +188,10 @@ docker volume inspect postgres-data
 ```
 
 **บันทึกผลการทดลอง - Step 4:**
-```
-<img width="1917" height="937" alt="4 1" src="https://github.com/user-attachments/assets/5423d062-a8cf-444b-9589-6b94afeaeb2c" />
 
-```
+![](https://github.com/user-attachments/assets/5423d062-a8cf-444b-9589-6b94afeaeb2c)
+
+
 
 ### Step 5: Connect to PostgreSQL และตรวจสอบ Configuration
 
@@ -229,13 +231,16 @@ WHERE name IN ('shared_buffers', 'work_mem', 'maintenance_work_mem', 'effective_
 ```
 
 **บันทึกผลการทดลอง - Step 5:**
-```
-<img width="1407" height="692" alt="5 1" src="https://github.com/user-attachments/assets/575a7c63-e4e9-4c7a-ba5e-60ef2838b011" />
-<img width="1392" height="402" alt="5 2" src="https://github.com/user-attachments/assets/f91efdae-ca4d-4f4a-a667-d03f72909176" />
-<img width="1451" height="487" alt="5 3" src="https://github.com/user-attachments/assets/ed4e7ec7-b733-44df-acbf-a1b1c7a532fc" />
-<img width="921" height="232" alt="5 4" src="https://github.com/user-attachments/assets/87b7cf32-419b-4511-b61a-707bd8086395" />
 
-```
+![](https://github.com/user-attachments/assets/575a7c63-e4e9-4c7a-ba5e-60ef2838b011)
+
+![](https://github.com/user-attachments/assets/f91efdae-ca4d-4f4a-a667-d03f72909176)
+
+![](https://github.com/user-attachments/assets/ed4e7ec7-b733-44df-acbf-a1b1c7a532fc)
+
+![](https://github.com/user-attachments/assets/87b7cf32-419b-4511-b61a-707bd8086395)
+
+
 
 ### Step 6: Database Management Operations
 
@@ -274,10 +279,11 @@ WHERE datname = 'lab_db';
 ```
 
 **บันทึกผลการทดลอง - Step 6:**
-```
-<img width="1645" height="276" alt="6 1" src="https://github.com/user-attachments/assets/81e19ffb-1c91-4cb1-8427-a7ad3113470d" />
-<img width="1027" height="503" alt="6 2" src="https://github.com/user-attachments/assets/0ac586e8-12b2-479c-81bf-ec11f5f2431d" />
-```
+
+![](https://github.com/user-attachments/assets/81e19ffb-1c91-4cb1-8427-a7ad3113470d)
+
+![](https://github.com/user-attachments/assets/0ac586e8-12b2-479c-81bf-ec11f5f2431d)
+
 
 ### Step 7: User และ Role Management
 
@@ -330,11 +336,13 @@ WHERE r.rolname NOT LIKE 'pg_%';
 ```
 
 **บันทึกผลการทดลอง - Step 7:**
-```
-<img width="802" height="593" alt="7 1" src="https://github.com/user-attachments/assets/c2a54f42-d720-415a-ba8e-4b1baaff290f" />
-<img width="895" height="411" alt="7 2" src="https://github.com/user-attachments/assets/c295bcdb-8765-4d54-9c63-a7b34fefc9b0" />
-<img width="866" height="427" alt="7 3" src="https://github.com/user-attachments/assets/14a679dc-7169-4f99-b5a4-f7ef96a6bdf6" />
-```
+
+![](https://github.com/user-attachments/assets/c2a54f42-d720-415a-ba8e-4b1baaff290f)
+
+![](https://github.com/user-attachments/assets/c295bcdb-8765-4d54-9c63-a7b34fefc9b0)
+
+![](https://github.com/user-attachments/assets/14a679dc-7169-4f99-b5a4-f7ef96a6bdf6)
+
 
 ### Step 8: การจัดการสิทธิ์ User
 
@@ -391,11 +399,13 @@ GRANT SELECT ON postgres_test_table TO lab_user;
 ```
 
 **บันทึกผลการทดลอง - Step 8:**
-```
-<img width="1640" height="936" alt="8 1" src="https://github.com/user-attachments/assets/6651468a-e99a-4566-bb3d-68fd93ba355b" />
-<img width="1125" height="305" alt="8 2" src="https://github.com/user-attachments/assets/89b765e1-b330-44de-9d25-ebbe0bcf06c2" />
-<img width="1552" height="130" alt="8 3" src="https://github.com/user-attachments/assets/fa937d24-d1a8-4f07-84dd-5a973108bbe6" />
-```
+
+![](https://github.com/user-attachments/assets/6651468a-e99a-4566-bb3d-68fd93ba355b)
+
+![](https://github.com/user-attachments/assets/89b765e1-b330-44de-9d25-ebbe0bcf06c2)
+
+![](https://github.com/user-attachments/assets/fa937d24-d1a8-4f07-84dd-5a973108bbe6)
+
 **คำถาม
  ```
 Access Privileges   postgres=arwdDxtm/postgres มีความหมายอย่างไร
@@ -502,12 +512,15 @@ INSERT INTO hr.employee_orders (employee_id, customer_id, order_date, commission
 ```
 
 **บันทึกผลการทดลอง - Step 9:**
-```
-<img width="1338" height="317" alt="9 1" src="https://github.com/user-attachments/assets/340856aa-b4c3-4b7f-bce4-2b9d963dc31c" />
-<img width="1247" height="915" alt="9 2" src="https://github.com/user-attachments/assets/329a2710-1037-40f0-895d-425ca38be01d" />
-<img width="1036" height="608" alt="9 3" src="https://github.com/user-attachments/assets/5bab85cd-3536-438d-bbd1-b04a279d4cc6" />
-<img width="1421" height="905" alt="9 4" src="https://github.com/user-attachments/assets/8abf26af-6123-499f-a5f9-1f31d10cb29e" />
-```
+
+![](https://github.com/user-attachments/assets/340856aa-b4c3-4b7f-bce4-2b9d963dc31c)
+
+![](https://github.com/user-attachments/assets/329a2710-1037-40f0-895d-425ca38be01d)
+
+![](https://github.com/user-attachments/assets/5bab85cd-3536-438d-bbd1-b04a279d4cc6)
+
+![](https://github.com/user-attachments/assets/8abf26af-6123-499f-a5f9-1f31d10cb29e)
+
 
 ### Step 10: ทดสอบการเข้าถึง Schema และ Search Path
 
@@ -568,12 +581,15 @@ SET search_path TO public;
 ```
 
 **บันทึกผลการทดลอง - Step 10:**
-```
-<img width="573" height="212" alt="10 1" src="https://github.com/user-attachments/assets/a2620f44-9ee5-4d86-a20e-5a44d82a6020" />
-<img width="1136" height="561" alt="10 2" src="https://github.com/user-attachments/assets/5d027f3e-f5c8-4182-a062-a2770d579016" />
-<img width="1292" height="580" alt="10 3" src="https://github.com/user-attachments/assets/aa1569a1-60f2-4120-9960-6b9ef51dc184" />
-<img width="1388" height="922" alt="10 4" src="https://github.com/user-attachments/assets/358971c6-7273-4646-8921-52048af2f2ef" />
-```
+
+![](https://github.com/user-attachments/assets/a2620f44-9ee5-4d86-a20e-5a44d82a6020)
+
+![](https://github.com/user-attachments/assets/5d027f3e-f5c8-4182-a062-a2770d579016)
+
+![](https://github.com/user-attachments/assets/aa1569a1-60f2-4120-9960-6b9ef51dc184)
+
+![](https://github.com/user-attachments/assets/358971c6-7273-4646-8921-52048af2f2ef)
+
 
 ### Step 11: ทดสอบการเชื่อมต่อจาก User อื่น
 
@@ -599,10 +615,11 @@ INSERT INTO test_permissions (name) VALUES ('Test by lab_user'); -- ทำไม
 ```
 
 **บันทึกผลการทดลอง - Step 11:**
-```
-<img width="1033" height="107" alt="11 1" src="https://github.com/user-attachments/assets/c961fa95-d701-4dbd-ba17-5da7e3cee18c" />
-<img width="1042" height="361" alt="11 2" src="https://github.com/user-attachments/assets/ea1db10a-fe4d-41ec-912a-2339b4555ee0" />
-```
+
+![](https://github.com/user-attachments/assets/c961fa95-d701-4dbd-ba17-5da7e3cee18c)
+
+![](https://github.com/user-attachments/assets/ea1db10a-fe4d-41ec-912a-2339b4555ee0)
+
 
 ### Step 12: การจัดการ Volume และ Data Persistence
 
@@ -632,13 +649,16 @@ docker run --name postgres-backup-test \
 ```
 
 **บันทึกผลการทดลอง - Step 12:**
-```
-<img width="902" height="83" alt="12" src="https://github.com/user-attachments/assets/5aee1e7a-4775-42b8-91f2-0e458956d9a0" />
-<img width="1232" height="147" alt="12 1" src="https://github.com/user-attachments/assets/ffd2d43a-6b55-4ae5-8836-cc9b245375c4" />
-<img width="896" height="167" alt="12 2" src="https://github.com/user-attachments/assets/5b646a02-d245-48fd-95fe-c20fb0485fe8" />
-<img width="1011" height="657" alt="12 3" src="https://github.com/user-attachments/assets/4a1407a5-7678-41d2-80e7-28b8a953e299" />
 
-```
+![](https://github.com/user-attachments/assets/5aee1e7a-4775-42b8-91f2-0e458956d9a0)
+
+![](https://github.com/user-attachments/assets/ffd2d43a-6b55-4ae5-8836-cc9b245375c4)
+
+![](https://github.com/user-attachments/assets/5b646a02-d245-48fd-95fe-c20fb0485fe8)
+
+![](https://github.com/user-attachments/assets/4a1407a5-7678-41d2-80e7-28b8a953e299)
+
+
 
 ## การตรวจสอบผลงานและ Performance
 
@@ -658,9 +678,9 @@ docker volume inspect postgres-data
 ```
 
 **บันทึกผล Checkpoint 1:**
-```
-<img width="1286" height="611" alt="13 1" src="https://github.com/user-attachments/assets/b51db83c-a708-453f-8aa5-b597a8bc0ea7" />
-```
+
+![](https://github.com/user-attachments/assets/b51db83c-a708-453f-8aa5-b597a8bc0ea7)
+
 
 ### Checkpoint 2: Database Performance และ Configuration
 ```sql
@@ -706,12 +726,13 @@ WHERE state = 'active';
 ```
 
 **บันทึกผล Checkpoint 2:**
-```
-<img width="1531" height="421" alt="14 1" src="https://github.com/user-attachments/assets/cdbe7dea-6c3a-4019-b4b4-befacab20d6a" />
-<img width="990" height="495" alt="14 2" src="https://github.com/user-attachments/assets/ea5c34be-e991-4d7b-8bd9-755fed0f6728" />
-<img width="1290" height="306" alt="14 3" src="https://github.com/user-attachments/assets/b0685605-41cf-436e-9cca-049d8852aa30" />
 
-```
+![](https://github.com/user-attachments/assets/cdbe7dea-6c3a-4019-b4b4-befacab20d6a)
+
+![](https://github.com/user-attachments/assets/ea5c34be-e991-4d7b-8bd9-755fed0f6728)
+
+![](https://github.com/user-attachments/assets/b0685605-41cf-436e-9cca-049d8852aa30)
+
 
 ## การแก้ไขปัญหาเบื้องต้น
 
@@ -777,11 +798,12 @@ docker run --name multi-postgres `
 ```
 
 **ผลการทำแบบฝึกหัด 1:**
-```
-<img width="1893" height="276" alt="h1 1" src="https://github.com/user-attachments/assets/c5eba93d-22a0-41ca-b8ad-8a81e2ff3030" />
-<img width="1412" height="107" alt="h1 2" src="https://github.com/user-attachments/assets/5775e0e1-8506-4583-a960-90e3a6c3b85a" />
 
-```
+![](https://github.com/user-attachments/assets/c5eba93d-22a0-41ca-b8ad-8a81e2ff3030)
+
+![](https://github.com/user-attachments/assets/5775e0e1-8506-4583-a960-90e3a6c3b85a)
+
+
 
 ### แบบฝึกหัด 2: User Management และ Security
 **คำสั่ง**: สร้างระบบผู้ใช้ที่สมบูรณ์:
@@ -823,10 +845,9 @@ CREATE USER db_admins WITH
 ```
 
 **ผลการทำแบบฝึกหัด 2:**
-```
-<img width="1418" height="933" alt="h2 1" src="https://github.com/user-attachments/assets/5556ef25-05be-4470-9027-9ed97d33bb29" />
 
-```
+![](https://github.com/user-attachments/assets/5556ef25-05be-4470-9027-9ed97d33bb29)
+
 
 ### แบบฝึกหัด 3: Schema Design และ Complex Queries
 **คำสั่ง**: สร้างระบบฐานข้อมูลร้านค้าออนไลน์:
@@ -1165,11 +1186,13 @@ VALUES
 
 
 **ผลการทำแบบฝึกหัด 3:**
-```
-<img width="1177" height="465" alt="h3 1" src="https://github.com/user-attachments/assets/a639de43-e96e-47d9-98fd-9d53fdec93da" />
-<img width="1341" height="687" alt="h3 2" src="https://github.com/user-attachments/assets/ebc6f0ac-5e8a-4452-9450-bbcba7bd206f" />
-<img width="925" height="968" alt="h3 3" src="https://github.com/user-attachments/assets/7baa2f5a-809c-4d4a-8700-7fff36812ec0" />
-```
+
+![](https://github.com/user-attachments/assets/a639de43-e96e-47d9-98fd-9d53fdec93da)
+
+![](https://github.com/user-attachments/assets/ebc6f0ac-5e8a-4452-9450-bbcba7bd206f)
+
+![](https://github.com/user-attachments/assets/7baa2f5a-809c-4d4a-8700-7fff36812ec0)
+
 
 ```
 การวิเคราะห์ข้อมูลที่ได้
