@@ -80,7 +80,7 @@ docker run hello-world
 
 **บันทึกผลการทดลอง - การเตรียมความพร้อม:**
 
-![รูป0]("https://github.com/user-attachments/assets/a159db27-b93b-4210-8647-0a348608ffc4)
+("https://github.com/user-attachments/assets/a159db27-b93b-4210-8647-0a348608ffc4)
 
 
 
