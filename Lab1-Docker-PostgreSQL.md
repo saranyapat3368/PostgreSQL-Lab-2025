@@ -777,6 +777,9 @@ docker run --name multi-postgres `
 
 **ผลการทำแบบฝึกหัด 1:**
 ```
+<img width="1893" height="276" alt="h1 1" src="https://github.com/user-attachments/assets/c5eba93d-22a0-41ca-b8ad-8a81e2ff3030" />
+<img width="1412" height="107" alt="h1 2" src="https://github.com/user-attachments/assets/5775e0e1-8506-4583-a960-90e3a6c3b85a" />
+
 ```
 
 ### แบบฝึกหัด 2: User Management และ Security
@@ -793,28 +796,34 @@ docker run --name multi-postgres `
    - `admin_user` (รหัสผ่าน: `admin123`) - เป็นสมาชิกของ db_admins
 
 ```sql
--- 1. สร้าง Role Groups
-CREATE ROLE app_developers;
-CREATE ROLE data_analysts;
-CREATE ROLE db_admins;
+CREATE USER data_analysts WITH 
+    PASSWORD 'analyst123'
+    LOGIN
+    NOSUPERUSER
+    NOCREATEDB
+    NOCREATEROLE
+    NOINHERIT
+    NOREPLICATION
+    CONNECTION LIMIT 10;
 
--- 2. สร้าง Users และกำหนดรหัสผ่าน + เพิ่มเข้า Role Groups
--- dev_user สำหรับนักพัฒนา
-CREATE USER dev_user WITH PASSWORD 'dev123';
-GRANT app_developers TO dev_user;
+CREATE USER app_developers WITH 
+    PASSWORD 'dev123' 
+    SUPERUSER 
+    CREATEDB 
+    CREATEROLE
+    LOGIN;
 
--- analyst_user สำหรับนักวิเคราะห์
-CREATE USER analyst_user WITH PASSWORD 'analyst123';
-GRANT data_analysts TO analyst_user;
-
--- admin_user สำหรับผู้ดูแลระบบ
-CREATE USER admin_user WITH PASSWORD 'admin123';
-GRANT db_admins TO admin_user;
+CREATE USER db_admins WITH
+    PASSWORD 'admin123'
+    CREATEDB
+    CREATEROLE
+    LOGIN
+    NOSUPERUSER;
 ```
 
 **ผลการทำแบบฝึกหัด 2:**
 ```
-<img width="1063" height="365" alt="16 1" src="https://github.com/user-attachments/assets/537f318b-ade6-4616-bef4-d3b288687836" />
+<img width="1418" height="933" alt="h2 1" src="https://github.com/user-attachments/assets/5556ef25-05be-4470-9027-9ed97d33bb29" />
 
 ```
 
@@ -960,20 +969,213 @@ INSERT INTO ecommerce.order_items (order_id, product_id, quantity, price) VALUES
    - หาลูกค้าที่ซื้อสินค้ามากที่สุด
 
 ```sql
--- พื้นที่สำหรับคำตอบ - เขียน SQL commands ทั้งหมด
+-- หาสินค้าที่ขายดีที่สุด 5 อันดับ
+SELECT p.name AS product_name,
+       SUM(oi.quantity) AS total_quantity
+FROM ecommerce.order_items oi
+JOIN ecommerce.products p ON oi.product_id = p.product_id
+GROUP BY p.name
+ORDER BY total_quantity DESC
+LIMIT 5;
+
+-- หายอดขายรวมของแต่ละหมวดหมู่
+SELECT c.name AS category,
+       SUM(oi.quantity * oi.price) AS total_sales
+FROM ecommerce.order_items oi
+JOIN ecommerce.products p ON oi.product_id = p.product_id
+JOIN ecommerce.categories c ON p.category_id = c.category_id
+GROUP BY c.name
+ORDER BY total_sales DESC;
+
+-- หาลูกค้าที่ซื้อสินค้ามากที่สุด
+SELECT cu.name AS customer_name,
+       SUM(oi.quantity) AS total_items
+FROM ecommerce.orders o
+JOIN ecommerce.order_items oi ON o.order_id = oi.order_id
+JOIN ecommerce.customers cu ON o.customer_id = cu.customer_id
+GROUP BY cu.name
+ORDER BY total_items DESC
+LIMIT 1;
 
 ```
+
+```
+CREATE SCHEMA ecommerce;
+CREATE SCHEMA analytics;
+CREATE SCHEMA audit;
+
+CREATE TABLE ecommerce.categories (
+  category_id   BIGSERIAL PRIMARY KEY,
+  name          TEXT NOT NULL,
+  description   TEXT
+);
+
+CREATE TABLE ecommerce.products (
+  product_id    BIGSERIAL PRIMARY KEY,
+  name          TEXT NOT NULL,
+  description   TEXT,
+  price         NUMERIC(10,2) NOT NULL,
+  category_id   BIGINT REFERENCES ecommerce.categories(category_id),
+  stock         INT NOT NULL
+);
+
+CREATE TABLE ecommerce.customers (
+  customer_id   BIGSERIAL PRIMARY KEY,
+  name          TEXT NOT NULL,
+  email         TEXT NOT NULL,
+  phone         TEXT,
+  address       TEXT
+);
+
+CREATE TABLE ecommerce.orders (
+  order_id      BIGSERIAL PRIMARY KEY,
+  customer_id   BIGINT REFERENCES ecommerce.customers(customer_id),
+  order_date    TIMESTAMP NOT NULL,
+  status        TEXT NOT NULL,
+  total         NUMERIC(12,2) NOT NULL
+);
+
+CREATE TABLE ecommerce.order_items (
+  order_item_id BIGSERIAL PRIMARY KEY,
+  order_id      BIGINT REFERENCES ecommerce.orders(order_id),
+  product_id    BIGINT REFERENCES ecommerce.products(product_id),
+  quantity      INT NOT NULL,
+  price         NUMERIC(10,2) NOT NULL
+);
+
+INSERT INTO ecommerce.categories (name, description)
+VALUES 
+  ('Electronics', 'Electronic devices and gadgets'),
+  ('Clothing', 'Apparel and fashion items'),
+  ('Books', 'Books and educational materials'),
+  ('Home & Garden', 'Home improvement and garden supplies'),
+  ('Sports', 'Sports equipment and accessories');
+
+INSERT INTO ecommerce.products (name, description, price, category_id, stock) 
+VALUES 
+  ('iPhone 15', 'Latest Apple smartphone', 999.99, 1, 50),
+  ('Samsung Galaxy S24', 'Android flagship phone', 899.99, 1, 45),
+  ('MacBook Air', 'Apple laptop computer', 1299.99, 1, 30),
+  ('Wireless Headphones', 'Bluetooth noise-canceling headphones', 199.99, 1, 100),
+  ('Gaming Mouse', 'High-precision gaming mouse', 79.99, 1, 75),
+
+  ('T-Shirt', 'Cotton casual t-shirt', 19.99, 2, 200),
+  ('Jeans', 'Denim blue jeans', 59.99, 2, 150),
+  ('Sneakers', 'Comfortable running sneakers', 129.99, 2, 80),
+  ('Jacket', 'Winter waterproof jacket', 89.99, 2, 60),
+  ('Hat', 'Baseball cap', 24.99, 2, 120),
+
+  ('Programming Book', 'Learn Python programming', 39.99, 3, 40),
+  ('Novel', 'Best-selling fiction novel', 14.99, 3, 90),
+  ('Textbook', 'University mathematics textbook', 79.99, 3, 25),
+
+  ('Garden Tools Set', 'Complete gardening tool kit', 49.99, 4, 35),
+  ('Plant Pot', 'Ceramic decorative pot', 15.99, 4, 80),
+
+  ('Tennis Racket', 'Professional tennis racket', 149.99, 5, 20),
+  ('Football', 'Official size football', 29.99, 5, 55);
+
+INSERT INTO ecommerce.customers (name, email, phone, address) 
+VALUES 
+  ('John Smith', 'john.smith@email.com', '555-0101', '123 Main St, City A'),
+  ('Sarah Johnson', 'sarah.j@email.com', '555-0102', '456 Oak Ave, City B'),
+  ('Mike Brown', 'mike.brown@email.com', '555-0103', '789 Pine Rd, City C'),
+  ('Emily Davis', 'emily.d@email.com', '555-0104', '321 Elm St, City A'),
+  ('David Wilson', 'david.w@email.com', '555-0105', '654 Maple Dr, City B'),
+  ('Lisa Anderson', 'lisa.a@email.com', '555-0106', '987 Cedar Ln, City C'),
+  ('Tom Miller', 'tom.miller@email.com', '555-0107', '147 Birch St, City A'),
+  ('Amy Taylor', 'amy.t@email.com', '555-0108', '258 Ash Ave, City B');
+
+INSERT INTO ecommerce.orders (customer_id, order_date, status, total) 
+VALUES 
+  (1, '2024-01-15 10:30:00', 'completed', 1199.98),
+  (2, '2024-01-16 14:20:00', 'completed', 219.98),
+  (3, '2024-01-17 09:15:00', 'completed', 159.97),
+  (1, '2024-01-18 11:45:00', 'completed', 79.99),
+  (4, '2024-01-19 16:30:00', 'completed', 89.98),
+  (5, '2024-01-20 13:25:00', 'completed', 1329.98),
+  (2, '2024-01-21 15:10:00', 'completed', 149.99),
+  (6, '2024-01-22 12:40:00', 'completed', 294.97),
+  (3, '2024-01-23 08:50:00', 'completed', 199.99),
+  (7, '2024-01-24 17:20:00', 'completed', 169.98),
+  (1, '2024-01-25 10:15:00', 'completed', 39.99),
+  (8, '2024-01-26 14:35:00', 'completed', 599.97),
+  (4, '2024-01-27 11:20:00', 'processing', 179.98),
+  (5, '2024-01-28 09:45:00', 'shipped', 44.98),
+  (6, '2024-01-29 16:55:00', 'completed', 129.99);
+
+INSERT INTO ecommerce.order_items (order_id, product_id, quantity, price) 
+VALUES 
+  -- Order 1: John Smith
+  (1, 1, 1, 999.99),  -- iPhone 15
+  (1, 4, 1, 199.99),  -- Wireless Headphones
+
+  -- Order 2: Sarah Johnson
+  (2, 4, 1, 199.99),  -- Wireless Headphones
+  (2, 6, 1, 19.99),   -- T-Shirt
+
+  -- Order 3: Mike Brown
+  (3, 7, 1, 59.99),   -- Jeans
+  (3, 5, 1, 79.99),   -- Gaming Mouse
+  (3, 6, 1, 19.99),   -- T-Shirt
+
+  -- Order 4: John Smith
+  (4, 5, 1, 79.99),   -- Gaming Mouse
+
+  -- Order 5: Emily Davis
+  (5, 9, 1, 89.99),   -- Jacket
+
+  -- Order 6: David Wilson
+  (6, 3, 1, 1299.99), -- MacBook Air
+  (6, 12, 2, 14.99),  -- Novel x2
+
+  -- Order 7: Sarah Johnson
+  (7, 16, 1, 149.99), -- Tennis Racket
+
+  -- Order 8: Lisa Anderson
+  (8, 8, 2, 129.99),  -- Sneakers x2
+  (8, 10, 1, 24.99),  -- Hat
+  (8, 11, 1, 39.99),  -- Programming Book
+
+  -- Order 9: Mike Brown
+  (9, 4, 1, 199.99),  -- Wireless Headphones
+
+  -- Order 10: Tom Miller
+  (10, 2, 1, 899.99), -- Samsung Galaxy S24
+  (10, 6, 3, 19.99),  -- T-Shirt x3
+  (10, 14, 1, 49.99), -- Garden Tools Set
+
+  -- Order 11: John Smith
+  (11, 11, 1, 39.99), -- Programming Book
+
+  -- Order 12: Amy Taylor
+  (12, 1, 1, 999.99), -- iPhone 15 (ลดราคาเหลือ 599.97)
+
+  -- Order 13: Emily Davis (processing)
+  (13, 17, 6, 29.99), -- Football x6
+
+  -- Order 14: David Wilson (shipped)
+  (14, 15, 2, 15.99), -- Plant Pot x2
+  (14, 12, 1, 14.99), -- Novel
+
+  -- Order 15: Lisa Anderson
+  (15, 8, 1, 129.99); -- Sneakers
+```
+
 
 **ผลการทำแบบฝึกหัด 3:**
 ```
-ใส่ Screenshot ของ:
-1. โครงสร้าง schemas และ tables (\dn+, \dt ecommerce.*)
-2. ข้อมูลตัวอย่างในตารางต่างๆ
-3. ผลการรัน queries ที่สร้าง
-4. การวิเคราะห์ข้อมูลที่ได้
+<img width="1177" height="465" alt="h3 1" src="https://github.com/user-attachments/assets/a639de43-e96e-47d9-98fd-9d53fdec93da" />
+<img width="1341" height="687" alt="h3 2" src="https://github.com/user-attachments/assets/ebc6f0ac-5e8a-4452-9450-bbcba7bd206f" />
+<img width="925" height="968" alt="h3 3" src="https://github.com/user-attachments/assets/7baa2f5a-809c-4d4a-8700-7fff36812ec0" />
 ```
 
-
+```
+การวิเคราะห์ข้อมูลที่ได้
+- ขายดีที่สุดจริงตามจำนวน: Football, T-Shirt, Sneakers  ควรเติมสต็อก และจัดโปรโมชั่นแบบแพ็ก
+- ยอดขายรวมสูงสุดจริง: Electronics  ควรลงทุนเพิ่ม และทำโฆษณา
+- ลูกค้าซื้อเยอะสุดจริง: Emily Davisควรให้สิทธิพิเศษ/โปรโมชั่นเฉพาะบุคคล
+```
 ## การทดสอบความเข้าใจ
 
 ### Quiz 1: Conceptual Questions
@@ -986,7 +1188,21 @@ INSERT INTO ecommerce.order_items (order_id, product_id, quantity, price) VALUES
 
 **คำตอบ Quiz 1:**
 ```
-เขียนคำตอบที่นี่
+1
+   - Named Volume คือพื้นที่จัดเก็บข้อมูลที่ Docker จัดการให้โดยอัตโนมัติ มีความยืดหยุ่นสูง ใช้ซ้ำได้ง่าย และเหมาะสำหรับการจัดเก็บข้อมูลถาวรของ PostgreSQL (เช่น data directory)
+   - Bind Mount จะแมปโฟลเดอร์จากเครื่องโฮสต์เข้ากับ container โดยตรง ทำให้สามารถเข้าถึงไฟล์จากภายนอกได้ง่ายกว่า เหมาะกับไฟล์ที่ต้องแก้ไขบ่อย เช่น config หรือ SQL scripts
+
+2.
+   - shared_buffers เป็นหน่วยความจำที่ PostgreSQL ใช้ในการเก็บข้อมูลที่เข้าถึงบ่อยใน RAM เพื่อประสิทธิภาพ โดยตั้งเป็น 25% จะช่วยให้ระบบมีความสมดุลระหว่าง PostgreSQL และระบบปฏิบัติการ (OS) โดยไม่กิน RAM ทั้งหมด
+
+3.
+   - ช่วยแบ่งกลุ่มข้อมูลออกเป็นหมวดหมู่ตามฟังก์ชัน (เช่น `sales`, `hr`, `inventory`) เพื่อความเป็นระเบียบ แยกสิทธิ์การเข้าถึงได้ง่าย และลดความซับซ้อนของการจัดการในระบบขนาดใหญ่
+
+4.
+   - ติดตั้งและรัน PostgreSQL ได้ง่ายบนทุกระบบ
+   - แยกสภาพแวดล้อมการพัฒนาออกจากเครื่องจริง
+   - ทำให้สามารถตั้งค่าหลายฐานข้อมูลหรือหลายเวอร์ชันได้พร้อมกัน
+   - ง่ายต่อการ backup/restore และทำ CI/CD pipeline
 ```
 
 
